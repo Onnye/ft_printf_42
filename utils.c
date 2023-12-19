@@ -1,57 +1,89 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ltufo <ltufo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/18 12:40:53 by ltufo             #+#    #+#             */
+/*   Updated: 2023/12/19 12:53:15 by ltufo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-int     ft_strlen(const char *str)
+int ft_putchar(char c)
 {
+    write(1, &c, 1);
+    return 1;
+}
+
+int ft_putstr(char *str)
+{
+    if (str == NULL)
+    {
+        write(1, "(null)", 6);
+        return 6;
+    }
+
     int len = 0;
     while (str[len])
+    {
+        write(1, &str[len], 1);
         len++;
+    }
     return len;
 }
 
-void    parse_flags(const char **format, t_flags *flags, va_list args)
+int ft_putnbr(int n)
 {
-    while (**format == '-' || **format == '0' || **format == '.' || **format == '*' || ft_isdigit(**format) || **format == '#' || **format == ' ' || **format == '+')
+    int count = 0;
+    if (n < 0)
     {
-        if (**format == '-')
-            flags->minus = 1;
-        else if (**format == '0')
-            flags->zero = 1;
-        else if (**format == '.')
-        {
-            flags->dot = 0;
-            (*format)++;
-            if (**format == '*')
-                flags->dot = va_arg(args, int);
-            else
-            {
-                while (ft_isdigit(**format))
-                    flags->dot = flags->dot * 10 + (*((*format)++) - '0');
-                (*format)--;
-            }
-        }
-        else if (**format == '*')
-        {
-            flags->width = va_arg(args, int);
-            if (flags->width < 0)
-            {
-                flags->minus = 1;
-                flags->width *= -1;
-            }
-        }
-        else if (ft_isdigit(**format))
-        {
-            flags->width = 0;
-            while (ft_isdigit(**format))
-                flags->width = flags->width * 10 + (*((*format)++) - '0');
-            (*format)--;
-        }
-        else if (**format == '#')
-            flags->sharp = 1;
-        else if (**format == ' ')
-            flags->space = 1;
-        else if (**format == '+')
-            flags->plus = 1;
-
-        (*format)++;
+        count += ft_putchar('-');
+        n = -n;
     }
+    if (n >= 10)
+        count += ft_putnbr(n / 10);
+    count += ft_putchar(n % 10 + '0');
+    return count;
+}
+
+void ft_itoa_base(unsigned long long num, char *base, char *buffer, int *index)
+{
+    size_t base_len = 0;
+    while (base[base_len])
+        base_len++;
+
+    if (num >= base_len)
+        ft_itoa_base(num / base_len, base, buffer, index);
+
+    buffer[(*index)++] = base[num % base_len];
+}
+
+int ft_putnbrbase(unsigned long long n, char *base)
+{
+    char buffer[20]; // Assuming a reasonable buffer size
+    int index = 0;
+
+    ft_itoa_base(n, base, buffer, &index);
+    buffer[index] = '\0';
+
+    return ft_putstr(buffer);
+}
+
+int ft_putptr(void *ptr)
+{
+    char hex_base[] = "0123456789abcdef";
+    char hex_buffer[20]; // Assuming a pointer size of 8 bytes, +2 for "0x", +1 for null terminator
+    int index = 0;
+
+    hex_buffer[index++] = '0';
+    hex_buffer[index++] = 'x';
+
+    ft_itoa_base((unsigned long long)ptr, hex_base, hex_buffer, &index);
+
+    hex_buffer[index] = '\0';
+
+    return ft_putstr(hex_buffer);
 }

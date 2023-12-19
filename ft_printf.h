@@ -1,27 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ltufo <ltufo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/18 15:06:48 by ltufo             #+#    #+#             */
+/*   Updated: 2023/12/19 13:04:16 by ltufo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <stdarg.h>
+#include <stdarg.h>
+#include <unistd.h>
+#include <stdlib.h>
 
-typedef struct      s_flags
-{
-    int             minus;
-    int             zero;
-    int             dot;
-    int             width;
-    int             sharp;
-    int             space;
-    int             plus;
-}                   t_flags;
 
-int     ft_printf(const char *format, ...);
-void    parse_flags(const char **format, t_flags *flags, va_list args);
-void    conversion_c(va_list args, t_flags *flags);
-void    conversion_s(va_list args, t_flags *flags);
-void    conversion_p(va_list args, t_flags *flags);
-void    conversion_di(va_list args, t_flags *flags);
-void    conversion_u(va_list args, t_flags *flags);
-void    conversion_x(va_list args, t_flags *flags, int uppercase);
-void    conversion_percent(t_flags *flags);
+int ft_putchar(char c);
+int ft_putstr(char *str);
+int ft_putnbr(int n);
+void ft_itoa_base(unsigned long long num, char *base, char *buffer, int *index);
+int ft_putnbrbase(unsigned long long n, char *base);
+int ft_putptr(void *ptr);
+int ft_printf(const char *format, ...);
 
 #endif

@@ -1,31 +1,24 @@
 NAME = libftprintf.a
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-SRCS = ft_printf.c \
-       conversion_c.c \
-       conversion_s.c \
-       conversion_p.c \
-       conversion_di.c \
-       conversion_u.c \
-       conversion_x.c \
-       conversion_percent.c \
-       utils.c
+
+SRCS = ft_printf.c utils.c
 
 OBJS = $(SRCS:.c=.o)
 
+CC = cc
+RM = rm -f
+CFLAGS = -Wall -Wextra -Werror
+
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar rc $(NAME) $(OBJS)
-	ranlib $(NAME)
+$(NAME):$(OBJS)
+		ar rcs $(NAME) $(OBJS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-clean:
-	rm -f $(OBJS)
+clean: 
+		$(RM) $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+		$(RM) $(NAME)
 
 re: fclean all
+
+.PHONY : all clean fclean re

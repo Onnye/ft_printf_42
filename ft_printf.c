@@ -1,47 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ltufo <ltufo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/18 17:02:46 by ltufo             #+#    #+#             */
+/*   Updated: 2023/12/19 12:53:37 by ltufo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-int     ft_printf(const char *format, ...)
+int ft_printf(const char *format, ...)
 {
     va_list args;
-    t_flags flags;
-
     va_start(args, format);
-    int count = 0;
 
+    int count = 0;
     while (*format)
     {
-        if (*format == '%' && *(format + 1))
+        if (*format == '%')
         {
             format++;
-            parse_flags(&format, &flags, args);
-            if (*format)
-            {
-                if (*format == 'c')
-                    conversion_c(args, &flags);
-                else if (*format == 's')
-                    conversion_s(args, &flags);
-                else if (*format == 'p')
-                    conversion_p(args, &flags);
-                else if (*format == 'd' || *format == 'i')
-                    conversion_di(args, &flags);
-                else if (*format == 'u')
-                    conversion_u(args, &flags);
-                else if (*format == 'x')
-                    conversion_x(args, &flags, 0);
-                else if (*format == 'X')
-                    conversion_x(args, &flags, 1);
-                else if (*format == '%')
-                    conversion_percent(&flags);
-            }
+            if (*format == 'c')
+                count += ft_putchar(va_arg(args, int));
+            else if (*format == 's')
+                count += ft_putstr(va_arg(args, char *));
+            else if (*format == 'd' || *format == 'i')
+                count += ft_putnbr(va_arg(args, int));
+            else if (*format == 'p')
+                count += ft_putptr(va_arg(args, void *));
+            else if (*format == 'u')
+                count += ft_putnbr(va_arg(args, unsigned int));
+            else if (*format == 'x')
+                count += ft_putnbrbase(va_arg(args, unsigned int), "0123456789abcdef");
+            else if (*format == 'X')
+                count += ft_putnbrbase(va_arg(args, unsigned int), "0123456789ABCDEF");
+            else if (*format == '%')
+                count += ft_putchar('%');
+
+            // Move to the next format specifier
+            format++;
         }
         else
         {
-            write(1, format, 1);
-            count++;
+            count += ft_putchar(*format);
+            format++;
         }
-        format++;
     }
 
     va_end(args);
-    return (count);
+    return count;
 }
+
