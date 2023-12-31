@@ -38,6 +38,11 @@ int ft_putstr(char *str)
 int ft_putnbr(int n)
 {
     int count = 0;
+    if (n == -2147483648)
+     {
+        count = ft_putstr("-2147483648");
+        return (count);
+    }
     if (n < 0)
     {
         count += ft_putchar('-');
