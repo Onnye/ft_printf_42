@@ -21,10 +21,7 @@ int ft_putchar(char c)
 int ft_putstr(char *str)
 {
     if (str == NULL)
-    {
-        write(1, "(null)", 6);
-        return 6;
-    }
+        return write(1, "(null)", 6);
 
     int len = 0;
     while (str[len])
@@ -35,23 +32,25 @@ int ft_putstr(char *str)
     return len;
 }
 
+int ft_putunbr(unsigned int n)
+{
+    int count = 0;
+    if (n >= 10)
+        count += ft_putunbr(n / 10);
+    count += ft_putchar(n % 10 + '0');
+    return count;
+}
+
 int ft_putnbr(int n)
 {
     int count = 0;
-    if (n == -2147483648)
-     {
-        count = ft_putstr("-2147483648");
-        return (count);
-    }
     if (n < 0)
     {
         count += ft_putchar('-');
-        n = -n;
+        count += ft_putunbr((unsigned int)(~n + 1));  // Use ~ and + 1 to invert bits
+        return count;
     }
-    if (n >= 10)
-        count += ft_putnbr(n / 10);
-    count += ft_putchar(n % 10 + '0');
-    return count;
+    return ft_putunbr((unsigned int)n);
 }
 
 void ft_itoa_base(unsigned long long num, char *base, char *buffer, int *index)

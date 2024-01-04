@@ -32,7 +32,7 @@ int ft_printf(const char *format, ...)
             else if (*format == 'p')
                 count += ft_putptr(va_arg(args, void *));
             else if (*format == 'u')
-                count += ft_putnbr(va_arg(args, unsigned int));
+                count += ft_putunbr(va_arg(args, unsigned int));
             else if (*format == 'x')
                 count += ft_putnbrbase(va_arg(args, unsigned int), "0123456789abcdef");
             else if (*format == 'X')
