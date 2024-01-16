@@ -79,9 +79,19 @@ int ft_putnbrbase(unsigned long long n, char *base)
 int ft_putptr(void *ptr)
 {
     char hex_base[] = "0123456789abcdef";
-    char hex_buffer[20]; // Assuming a pointer size of 8 bytes, +2 for "0x", +1 for null terminator
-    int index = 0;
+    
+    // Determine the size of the pointer on the platform
+    size_t pointer_size = sizeof(void *);
 
+    // Allocate memory for the buffer dynamically
+    char *hex_buffer = (char *)malloc(pointer_size * 2 + 3); // +2 for "0x", +1 for null terminator
+
+    if (hex_buffer == NULL) {
+        // Handle memory allocation failure
+        return -1;
+    }
+
+    int index = 0;
     hex_buffer[index++] = '0';
     hex_buffer[index++] = 'x';
 
@@ -89,5 +99,10 @@ int ft_putptr(void *ptr)
 
     hex_buffer[index] = '\0';
 
-    return ft_putstr(hex_buffer);
+    int count = ft_putstr(hex_buffer);
+
+    // Free the dynamically allocated memory
+    free(hex_buffer);
+
+    return count;
 }
