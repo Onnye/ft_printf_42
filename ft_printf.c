@@ -54,3 +54,32 @@ int ft_printf(const char *format, ...)
     return count;
 }
 
+/*
+int main()
+{
+    // Test avec différents types d'arguments
+
+    int integer = 42;
+    unsigned int unsignedInteger = 12345;
+    char character = 'A';
+    char *string = "Hello, World!";
+    void *pointer = NULL;
+
+    // Test de ft_printf avec différentes catégories d'arguments
+    ft_printf("Integer: %d\n", integer);
+    ft_printf("Unsigned Integer: %u\n", unsignedInteger);
+    ft_printf("Character: %c\n", character);
+    ft_printf("String: %s\n", string);
+    ft_printf("Pointer: %p\n", pointer);
+
+    // Test du cas particulier ft_printf(0)
+    int result = ft_printf("Testing ft_printf(0): %d\n", 0);
+    
+    if (result == -1) {
+        // Handle potential error from ft_printf
+        ft_printf("Error in ft_printf.\n");
+    }
+
+    return 0;
+}
+*/
